@@ -1,0 +1,41 @@
+{
+ "report": {
+  "jobs": [
+   {
+    "validationResult": {
+     "details": {
+      "passedRules": 10,
+      "failedRules": 1,
+      "failedChecks": 2,
+      "ruleSummaries": [
+       {
+        "ruleStatus": "FAILED",
+        "specification": "ISO 19005-2:2011",
+        "clause": "6.2.11.4.1",
+        "testNumber": 1,
+        "failedChecks": 2,
+        "description": "The font programs for all fonts used for rendering within a conforming file shall be embedded",
+        "checks": [
+         {
+          "status": "failed",
+          "context": "root/document[0]/pages[0](3 0 obj PDPage)/contentStream[0]/operators[5]/font[0](Arial)",
+          "errorMessage": "The font program is not embedded",
+          "errorArguments": []
+         },
+         {
+          "status": "failed",
+          "context": "root/document[0]/pages[0](3 0 obj PDPage)/contentStream[0]/operators[5]/font[0](Arial)",
+          "errorMessage": "The font program is not embedded",
+          "errorArguments": []
+         }
+        ]
+       }
+      ]
+     },
+     "profileName": "PDF/A-2B validation profile",
+     "compliant": false
+    }
+   }
+  ]
+ }
+}

@@ -11,7 +11,18 @@
 nome: "UTFPR — Trabalhos acadêmicos (TCC, dissertação, tese)"
 
 documento:
-  pdfa:                      {ativa: true, severidade: aviso}   # a biblioteca pede PDF/A
+  pdfa:                      {ativa: true, severidade: aviso}   # só lê a declaração PDF/A nos metadados (rápido)
+  pdfa_verapdf:                                                 # validação completa (ISO 19005) com o veraPDF
+    ativa: true
+    severidade: erro
+    perfil: auto            # auto = usa a parte declarada no arquivo; ou 1b, 2b, 3b, 1a, 2a, 2u, 3a, 3u...
+    url:                    # ex.: http://verapdf:8080  (a variável de ambiente VERAPDF_URL tem prioridade)
+    cli:                    # alternativa sem Docker: caminho do executável "verapdf" (ou VERAPDF_CLI)
+    obrigatorio: false      # true = reprova se o veraPDF estiver indisponível; false = só avisa
+    timeout_s: 180
+    tentativas: 4           # o serviço Java leva alguns segundos para subir
+    espera_s: 5             # intervalo entre tentativas
+    max_regras_listadas: 15
   fontes_incorporadas:       {ativa: true, severidade: erro}
   texto_pesquisavel:         {ativa: true, severidade: erro}    # PDF digitalizado (imagem) reprova
 

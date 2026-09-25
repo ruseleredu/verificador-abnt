@@ -58,8 +58,39 @@ API:
 curl -F "arquivo=@tcc.pdf" http://localhost:8000/api/verificar
 ```
 
-Variáveis de ambiente: `REGRAS` (arquivo YAML), `TAMANHO_MAX_MB` (padrão 60), `WORKERS`, `PORTA`.
+Variáveis de ambiente: `REGRAS` (arquivo YAML), `VERAPDF_URL` (serviço veraPDF), `VERAPDF_CLI` (executável
+do veraPDF, alternativa sem Docker), `TAMANHO_MAX_MB` (padrão 60), `WORKERS`, `PORTA`.
 O `docker-compose.yml` monta `./regras` somente leitura: ajuste o YAML e reinicie, sem reconstruir.
+
+## Validação PDF/A com o veraPDF
+
+A biblioteca exige o depósito em PDF/A. Ler a declaração no arquivo (`documento.pdfa`) não basta: um PDF
+pode declarar PDF/A e violar a norma (fonte não incorporada, cor sem perfil ICC, transparência...). Por isso
+o `docker-compose.yml` sobe um segundo container com o [veraPDF](https://verapdf.org/), o validador de
+referência da PDF Association, e a regra `documento.pdfa_verapdf` envia o PDF a ele:
+
+```
+verificador ──POST /api/validate/{perfil} (multipart "file")──► verapdf (verapdf/rest, porta 8080, rede interna)
+            ◄──────────── relatório JSON (report.jobs[].validationResult[]) ─────────────
+```
+
+- Cada regra violada da ISO 19005 vira um achado: `[ISO 19005-1:2005 §6.7.2-1] descrição (n ocorrências).
+  Páginas: …`, mais um resumo "não conforme com o PDF/A-xx".
+- `perfil: auto` valida contra a parte declarada no arquivo. Para exigir uma parte específica, use `1b`,
+  `2b`, `3b`, etc. no YAML.
+- Se o veraPDF estiver fora do ar, a regra gera um **aviso** e o resto da verificação segue. Com
+  `obrigatorio: true` passa a ser **erro**. O cliente repete a chamada (`tentativas`, `espera_s`) porque
+  o serviço Java leva alguns segundos para subir.
+- Sem Docker: instale o veraPDF (1.24 ou superior) e defina `VERAPDF_CLI=/caminho/verapdf`. O verificador
+  roda `verapdf --format json --flavour {perfil} arquivo.pdf` e interpreta o mesmo JSON.
+- Para testar sem o veraPDF: `python tests/fake_verapdf.py 8080` sobe um servidor falso com o mesmo
+  protocolo (usado pelos testes automáticos).
+
+Validação direta, sem o verificador (descomente `ports` do serviço `verapdf` no compose):
+
+```bash
+curl -F "file=@tcc.pdf" http://localhost:8080/api/validate/auto
+```
 
 ## Sem Docker
 
@@ -75,7 +106,8 @@ python -m pytest -q                   # testes (exigem também: pip install pyte
 |---|---|
 | `documento.texto_pesquisavel` | PDF com texto (não digitalizado). Se for digitalizado, só as verificações do arquivo rodam |
 | `documento.fontes_incorporadas` | todas as fontes embutidas |
-| `documento.pdfa` | declaração de PDF/A nos metadados XMP |
+| `documento.pdfa` | declaração de PDF/A nos metadados XMP (triagem rápida) |
+| `documento.pdfa_verapdf` | **validação PDF/A completa (ISO 19005) com o veraPDF**: cada regra violada da norma vira um achado, com cláusula e páginas |
 | `pagina.formato` | A4 (210 × 297 mm) |
 | `pagina.margens` | 3 cm superior/esquerda, 2 cm inferior/direita, para texto, imagens e desenhos (o número de página é ignorado) |
 | `fonte.familia` | Arial ou Times (e equivalentes métricos), uma só família no texto |
@@ -135,8 +167,8 @@ as tabelas saíam numeradas como 3 e 4. Isso já foi corrigido na `utfprabntex.c
 - **Heurísticas sobre o PDF.** O PDF não diz o que é título, citação ou legenda: isso é inferido por
   posição, tamanho e padrões de texto. Documentos muito fora do padrão podem gerar falsos positivos, por
   isso o relatório mostra as medições e o PDF anotado, para conferência humana.
-- **PDF/A:** só lê a declaração nos metadados. A validação completa exige o
-  [veraPDF](https://verapdf.org/), que pode rodar como um segundo container.
+- **PDF/A:** a validação é a do veraPDF; o verificador só traduz o relatório. As regras da norma aparecem
+  em inglês, como o veraPDF as descreve.
 - **Não avalia conteúdo:** a formatação de cada referência (NBR 6023), as citações (NBR 10520) e a
   redação não são verificadas. Esses pontos pedem regras por tipo de referência ou um modelo de
   linguagem, e revisão humana.

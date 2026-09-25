@@ -1,0 +1,26 @@
+{
+ "report": {
+  "jobs": [
+   {
+    "itemDetails": {
+     "name": "modelo.pdf"
+    },
+    "validationResult": [
+     {
+      "details": {
+       "passedRules": 141,
+       "failedRules": 0,
+       "passedChecks": 98211,
+       "failedChecks": 0,
+       "ruleSummaries": []
+      },
+      "jobEndStatus": "normal",
+      "profileName": "PDF/A-3B validation profile",
+      "statement": "PDF file is compliant with Validation Profile requirements.",
+      "compliant": true
+     }
+    ]
+   }
+  ]
+ }
+}

@@ -1,0 +1,21 @@
+{
+ "report": {
+  "jobs": [
+   {
+    "itemDetails": {
+     "name": "x.pdf"
+    },
+    "taskException": {
+     "type": "PARSE",
+     "isExecuted": true,
+     "isSuccess": false,
+     "exceptionMessage": "Couldn't parse stream: invalid PDF header"
+    }
+   }
+  ],
+  "batchSummary": {
+   "totalJobs": 1,
+   "failedToParse": 1
+  }
+ }
+}

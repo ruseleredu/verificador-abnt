@@ -6,11 +6,26 @@ services:
       - "8000:8000"
     environment:
       REGRAS: /app/regras/utfpr.yaml   # troque para usar outro conjunto de regras
-      TAMANHO_MAX_MB: "60"
+      VERAPDF_URL: http://verapdf:8080 # validação PDF/A completa pelo container abaixo
+      TAMANHO_MAX_MB: "50" # O tamanho do arquivo não deve exceder a 50 MB. Arquivos com tamanho superior a 9 MB podem apresentar dificuldade de acesso em alguns navegadores.
       WORKERS: "2"
     volumes:
-      - ./regras:/app/regras:ro         # permite ajustar as regras sem reconstruir a imagem
+      - ./regras:/app/regras:ro         # ajuste as regras sem reconstruir a imagem
+      - ./dados:/dados                  # para o modo linha de comando (docker compose run)
+    depends_on:
+      - verapdf
     restart: unless-stopped
     read_only: true
     tmpfs:
       - /tmp
+  # Os arquivos textuais do trabalho devem ser entregues exclusivamente em formato PDF/A (PDF/A-1a validation profile), bem como os produtos educacionais e tecnológicos a eles vinculados.
+  # veraPDF-rest: validador de referência PDF/A (ISO 19005) da PDF Association / Open Preservation Foundation.
+  # Fica só na rede interna do compose (sem "ports"): apenas o verificador o acessa.
+  # Para produção, fixe a versão: troque "latest" pela tag/digest que você testou.
+  verapdf:
+    image: verapdf/rest:latest
+    expose:
+      - "8080"
+    ports: ["8081:8080"]              # descomente para usar a interface web do veraPDF diretamente
+    restart: unless-stopped
+    mem_limit: 2g                       # PDFs grandes consomem memória na validação

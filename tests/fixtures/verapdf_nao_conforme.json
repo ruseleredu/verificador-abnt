@@ -1,0 +1,153 @@
+{
+ "report": {
+  "buildInformation": {
+   "releaseDetails": [
+    {
+     "id": "core",
+     "version": "1.28.1"
+    },
+    {
+     "id": "validation-model",
+     "version": "1.28.1"
+    }
+   ]
+  },
+  "jobs": [
+   {
+    "itemDetails": {
+     "name": "ruim.pdf",
+     "size": 41803
+    },
+    "validationResult": [
+     {
+      "details": {
+       "passedRules": 118,
+       "failedRules": 3,
+       "passedChecks": 4876,
+       "failedChecks": 9,
+       "ruleSummaries": [
+        {
+         "ruleStatus": "FAILED",
+         "specification": "ISO 19005-1:2005",
+         "clause": "6.2.3.3",
+         "testNumber": 1,
+         "status": "failed",
+         "failedChecks": 7,
+         "description": "DeviceRGB shall only be used if a device independent DefaultRGB colour space has been set or if a DeviceRGB Output Intent is present",
+         "object": "PDDeviceRGB",
+         "test": "gOutputCS != null && gOutputCS == \"RGB \"",
+         "checks": [
+          {
+           "status": "failed",
+           "context": "root/document[0]/pages[3](13 0 obj PDPage)/contentStream[0]/operators[12]/colorSpace[0]",
+           "errorMessage": "DeviceRGB colour space is used without RGB output intent profile",
+           "errorArguments": []
+          },
+          {
+           "status": "failed",
+           "context": "root/document[0]/pages[3](13 0 obj PDPage)/contentStream[0]/operators[12]/colorSpace[0]",
+           "errorMessage": "DeviceRGB colour space is used without RGB output intent profile",
+           "errorArguments": []
+          },
+          {
+           "status": "failed",
+           "context": "root/document[0]/pages[4](14 0 obj PDPage)/contentStream[0]/operators[12]/colorSpace[0]",
+           "errorMessage": "DeviceRGB colour space is used without RGB output intent profile",
+           "errorArguments": []
+          },
+          {
+           "status": "failed",
+           "context": "root/document[0]/pages[4](14 0 obj PDPage)/contentStream[0]/operators[12]/colorSpace[0]",
+           "errorMessage": "DeviceRGB colour space is used without RGB output intent profile",
+           "errorArguments": []
+          },
+          {
+           "status": "failed",
+           "context": "root/document[0]/pages[5](15 0 obj PDPage)/contentStream[0]/operators[12]/colorSpace[0]",
+           "errorMessage": "DeviceRGB colour space is used without RGB output intent profile",
+           "errorArguments": []
+          },
+          {
+           "status": "failed",
+           "context": "root/document[0]/pages[5](15 0 obj PDPage)/contentStream[0]/operators[12]/colorSpace[0]",
+           "errorMessage": "DeviceRGB colour space is used without RGB output intent profile",
+           "errorArguments": []
+          },
+          {
+           "status": "failed",
+           "context": "root/document[0]/pages[1](11 0 obj PDPage)/contentStream[0]/operators[12]/colorSpace[0]",
+           "errorMessage": "DeviceRGB colour space is used without RGB output intent profile",
+           "errorArguments": []
+          }
+         ]
+        },
+        {
+         "ruleStatus": "FAILED",
+         "specification": "ISO 19005-1:2005",
+         "clause": "6.7.2",
+         "testNumber": 1,
+         "status": "failed",
+         "failedChecks": 1,
+         "description": "The document catalog dictionary shall include a metadata key whose value is a metadata stream",
+         "object": "CosDocument",
+         "checks": [
+          {
+           "status": "failed",
+           "context": "root",
+           "errorMessage": "The document catalog dictionary doesn't contain metadata key",
+           "errorArguments": []
+          }
+         ]
+        },
+        {
+         "ruleStatus": "FAILED",
+         "specification": "ISO 19005-1:2005",
+         "clause": "6.1.3",
+         "testNumber": 1,
+         "status": "failed",
+         "failedChecks": 1,
+         "description": "The file trailer dictionary shall contain the ID keyword",
+         "object": "CosTrailer",
+         "checks": [
+          {
+           "status": "failed",
+           "context": "root/trailer[0]",
+           "errorMessage": "Missing ID in the document trailer",
+           "errorArguments": []
+          }
+         ]
+        },
+        {
+         "ruleStatus": "PASSED",
+         "specification": "ISO 19005-1:2005",
+         "clause": "6.3.4",
+         "testNumber": 1,
+         "status": "passed",
+         "failedChecks": 0,
+         "description": "The font programs for all fonts used within a conforming file shall be embedded",
+         "checks": []
+        }
+       ]
+      },
+      "jobEndStatus": "normal",
+      "profileName": "PDF/A-1B validation profile",
+      "statement": "PDF file is not compliant with Validation Profile requirements.",
+      "compliant": false
+     }
+    ],
+    "processingTime": {
+     "duration": "00:00:00.612"
+    }
+   }
+  ],
+  "batchSummary": {
+   "totalJobs": 1,
+   "failedToParse": 0,
+   "encrypted": 0,
+   "validationSummary": {
+    "nonCompliantPdfaCount": 1,
+    "compliantPdfaCount": 0
+   }
+  }
+ }
+}

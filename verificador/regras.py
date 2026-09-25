@@ -100,7 +100,40 @@ def pdfa(ctx: Contexto, c: dict):
     ctx.medicoes["pdfa"] = f"PDF/A-{parte}{(conf or '').lower()}" if parte else "não"
     if not parte:
         yield Achado("", c["severidade"], "O arquivo não declara conformidade PDF/A (metadado pdfaid:part ausente). "
-                     "Obs.: esta verificação lê a declaração; a validação completa exige o veraPDF.")
+                     "A conformidade real é conferida pela regra documento.pdfa_verapdf (veraPDF).")
+
+
+@regra("documento.pdfa_verapdf", "PDF/A validado pelo veraPDF (ISO 19005)")
+def pdfa_verapdf(ctx: Contexto, c: dict):
+    from . import verapdf
+    try:
+        res = verapdf.validar(ctx.doc.caminho, c)
+    except verapdf.VeraPDFIndisponivel as exc:
+        ctx.medicoes["pdfa_verapdf"] = "não executado"
+        sev = c["severidade"] if c.get("obrigatorio") else "aviso"
+        yield Achado("", sev, f"Validação PDF/A não executada: {exc}.")
+        return
+    if res.erro:
+        ctx.medicoes["pdfa_verapdf"] = "erro ao processar"
+        yield Achado("", c["severidade"], f"O veraPDF não conseguiu processar o arquivo: {res.erro}")
+        return
+    ctx.medicoes["pdfa_verapdf"] = (f"{res.perfil}: {'conforme' if res.conforme else 'NÃO conforme'}"
+                                    f" ({len(res.regras_falhas)} regra(s) violada(s), "
+                                    f"{res.regras_aprovadas or 0} aprovada(s))")
+    if res.conforme:
+        return
+    maximo = int(c.get("max_regras_listadas", 15))
+    yield Achado("", c["severidade"], f"Arquivo não conforme com o {res.perfil or 'perfil PDF/A'}: "
+                 f"{len(res.regras_falhas)} regra(s) da norma violada(s), {res.verificacoes_falhas or 0} ocorrência(s). "
+                 "Detalhes abaixo; gere o PDF novamente com exportação PDF/A.")
+    for r in sorted(res.regras_falhas, key=lambda r: -r.falhas)[:maximo]:
+        onde = f" Páginas: {faixas(r.paginas)}." if r.paginas else ""
+        ex = f" Ex.: {r.exemplos[0][:160]}" if r.exemplos else ""
+        yield Achado("", c["severidade"], f"[{r.especificacao} §{r.codigo}] {r.descricao} "
+                     f"({r.falhas} ocorrência(s)).{onde}{ex}", r.paginas[:50])
+    if len(res.regras_falhas) > maximo:
+        yield Achado("", "info", f"Mais {len(res.regras_falhas) - maximo} regra(s) violada(s) não listadas "
+                     "(aumente max_regras_listadas no YAML para ver todas).")
 
 
 # ---------------------------------------------------------------- página
