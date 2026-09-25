@@ -1,0 +1,127 @@
+# Regras de formatação — UTFPR / ABNT (NBR 14724:2011, 6024, 6027, 6028, 10520)
+#
+# Cada regra pode ser desligada (ativa: false) e ter a severidade trocada:
+#   erro  -> reprova o documento
+#   aviso -> aparece no relatório, mas não reprova
+#   info  -> apenas informativo
+#
+# Unidades: milímetros (mm) para distâncias, pontos tipográficos (pt) para fontes.
+# ATENÇÃO: confira os valores com o manual de normalização vigente da biblioteca da UTFPR.
+
+nome: "UTFPR — Trabalhos acadêmicos (TCC, dissertação, tese)"
+
+documento:
+  pdfa:                      {ativa: true, severidade: aviso}   # a biblioteca pede PDF/A
+  fontes_incorporadas:       {ativa: true, severidade: erro}
+  texto_pesquisavel:         {ativa: true, severidade: erro}    # PDF digitalizado (imagem) reprova
+
+pagina:
+  formato:
+    ativa: true
+    severidade: erro
+    largura_mm: 210
+    altura_mm: 297
+    tolerancia_mm: 1.5
+  margens:
+    ativa: true
+    severidade: erro
+    superior_mm: 30
+    esquerda_mm: 30
+    direita_mm: 20
+    inferior_mm: 20
+    tolerancia_mm: 1.5
+    # a numeração de página fica na margem superior e é ignorada nesta verificação
+    ignorar_cabecalho: true
+
+fonte:
+  familia:
+    ativa: true
+    severidade: erro
+    # nomes (ou prefixos) aceitos; equivalentes métricos de Arial e Times entram na lista
+    permitidas:
+      arial:  [Arial, Helvetica, NimbusSan, "Nimbus Sans", LiberationSans, "Liberation Sans", Arimo, TeXGyreHeros, "TeX Gyre Heros"]
+      times:  [Times, NimbusRom, "Nimbus Roman", LiberationSerif, "Liberation Serif", Tinos, TeXGyreTermes, "TeX Gyre Termes"]
+    # fontes de símbolos, matemática e código não contam como "outra família"
+    ignorar: [CMSY, CMMI, CMEX, Symbol, MT-Extra, Wingdings, Courier, Consolas, Mono, Math, MSAM, MSBM, StandardSymbols, Dingbats, LMMono, LMMath, CambriaMath, SFRM1000, CMTT]
+    max_outras_familias_pct: 5     # % máximo de caracteres do texto em outra família
+  tamanho_corpo:
+    ativa: true
+    severidade: erro
+    pt: 12
+    tolerancia_pt: 0.4
+  tamanho_reduzido:                # citações longas, notas, legendas, fontes, paginação
+    ativa: true
+    severidade: aviso
+    pt: 10
+    tolerancia_pt: 0.5
+    max_abaixo_pct: 2              # % máximo de caracteres menores que (pt - tolerância)
+
+espacamento:
+  entrelinha:
+    ativa: true
+    severidade: erro
+    # distância entre linhas-base / tamanho da fonte. "1,5" no LaTeX ≈ 1,5; no Word ≈ 1,72.
+    razao_min: 1.40
+    razao_max: 1.90
+    min_pct_conforme: 80           # % das linhas do corpo que devem estar na faixa
+
+paragrafo:
+  recuo:
+    ativa: true
+    severidade: aviso
+    mm: 15                          # texto do modelo UTFPR: "recuo ... de 1,5 cm" (NBR não fixa valor)
+    tolerancia_mm: 1.0
+
+paginacao:
+  ativa: true
+  severidade: erro
+  # a numeração começa na parte textual; a capa não é contada (folha de rosto = 1)
+  paginas_nao_contadas_no_inicio: 1
+  pretextuais_sem_numero: true
+  posicao:                          # canto superior direito, 2 cm das bordas
+    distancia_direita_mm: 20
+    distancia_topo_mm: 20
+    tolerancia_mm: 6
+  paginas_de_titulo_sem_numero: aviso   # páginas só com o título de apêndice/anexo
+
+estrutura:
+  elementos_obrigatorios:
+    ativa: true
+    severidade: erro
+    # na ordem em que devem aparecer
+    ordem: [RESUMO, ABSTRACT, SUMÁRIO, INTRODUÇÃO, REFERÊNCIAS]
+  secao_primaria_nova_pagina:
+    ativa: true
+    severidade: erro
+  titulos_primarios:
+    ativa: true
+    severidade: aviso
+    caixa_alta: true
+    negrito: true
+
+resumo:
+  ativa: true
+  severidade: erro
+  palavras_min: 150                 # NBR 6028:2021 — trabalhos acadêmicos: 150 a 500 palavras
+  palavras_max: 500
+  palavras_chave_min: 3
+  palavras_chave_max: 5
+
+ilustracoes:
+  fonte_obrigatoria:
+    ativa: true
+    severidade: erro
+    tipos: [Figura, Quadro, Gráfico, Fotografia, Tabela, Mapa, Desenho, Esquema, Fluxograma, Organograma, Planta, Retrato, Imagem]
+  numeracao_sequencial:
+    ativa: true
+    severidade: aviso
+
+sumario:
+  paginas_conferem:
+    ativa: true
+    severidade: erro
+
+referencias:
+  ordem_alfabetica:
+    ativa: true
+    severidade: aviso

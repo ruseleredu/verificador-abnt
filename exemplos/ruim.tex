@@ -1,0 +1,29 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[margin=2cm]{geometry}
+\usepackage{graphicx}\setlength{\parindent}{0pt}\setlength{\parskip}{6pt}
+\usepackage{lipsum}
+\newcommand{\titulo}[1]{\begin{center}\textbf{#1}\end{center}}
+\begin{document}
+\pagestyle{empty}
+\begin{center}UNIVERSIDADE\\[8cm]\textbf{TRABALHO COM ERROS}\\[8cm]CIDADE 2026\end{center}\newpage
+\titulo{RESUMO}
+Este resumo é curto demais. \par Palavras-chave: teste.\newpage
+\titulo{SUMÁRIO}
+1 INTRODUÇÃO\dotfill 3\par
+2 DESENVOLVIMENTO\dotfill 3\par
+REFERÊNCIAS\dotfill 9\par
+\newpage
+\pagestyle{plain}\setcounter{page}{3}
+\textbf{1 INTRODUÇÃO}\par
+\lipsum[1-3]
+\begin{center}Figura 1 – Um retângulo qualquer\\ \rule{6cm}{3cm}\end{center}
+\lipsum[4]\par
+\textbf{2 DESENVOLVIMENTO}\par
+\lipsum[5-7]
+\newpage
+\textbf{REFERÊNCIAS}\par
+SOUZA, A. \textbf{Livro B}. São Paulo: Editora, 2020.\par
+ALMEIDA, C. \textbf{Livro A}. Curitiba: Editora, 2019.\par
+MOURA, D. \textbf{Livro C}. Rio de Janeiro: Editora, 2018.\par
+\end{document}
